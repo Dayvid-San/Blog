@@ -14,11 +14,16 @@ const path = require('path');
     app.use(bodyParser.json())
     
     // Handlebars
- //   app.engine('handlebars', handlebars({defaultLayout: true}))
-   // app.set('view engine', 'handlebars');
+    app.engine('handlebars', handlebars({defaultLayout: 'main'}))
+    app.set('view engine', 'handlebars');
 
     // Mongoose
-
+    mongoose.Promise = global.Promise
+    mongoose.connect('mongodb://localhost/blogapp').then(() => {
+        console.log('O banco está conctado')
+    }).catch((err)=>{
+        console.log('Não conectado ao mongo. Algo está errado. => '+err)
+    })
 
     // Public
     app.use(express.static(path.join(__dirname, 'public')))
