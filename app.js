@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express()
 const admin = require('./routes/admin')
+const path = require('path');
 
 
 // Configurações
@@ -18,8 +19,13 @@ const admin = require('./routes/admin')
 
     // Mongoose
 
+
+    // Public
+    app.use(express.static(path.join(__dirname, 'public')))
+
 // Rotas
 app.use('/user', admin)
+
 
 
 // Outros
