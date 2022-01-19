@@ -23,16 +23,35 @@ router.get('/categorias/add', (req, res)=>{
 })
 
 router.post('/categorias/add', (req,res)=>{
-    const novaCategoria = { // Recebe os dados do formulario
-        nome: req.body.nome,
-        slug: req.body.slug
+
+    var erros = []
+    // validando formularios
+    if(req.body.nome || typeof req.body.nome == undefined || req.body.nome == null){
+        error.push({texto: "nome invalido"})
+    }
+    if(!req.body.slug || typeof req.body.nome == undefined || req.body.nome == null){
+        error.push({texto: "slug invalido"})
+    }
+    if(req.body.nome.length < 2){
+        erros.push({texto: 'Nome da categoria é muito pequeno'})
+    }
+    if(erros.length > 0){
+        res.render('admin/add:categorias', {erros: erros})
+    }else{
+        const novaCategoria = { // Recebe os dados do formulario
+            nome: req.body.nome,
+            slug: req.body.slug
+        }
+    
+        new Categoria(novaCategoria).save().then(()=>{
+            req.flash('success_msg', 'categoria criada com sucesso')
+            res.redirect('/admin/categorias')
+        }).catch((err)=>{
+            req.flash('error_msg', 'Houve um erro ao salvar a cetegoria. Tente novamente!')
+            res.redirect('/admin')
+        })
     }
 
-    new Categoria(novaCategoria).save().then(()=>{
-        console.log('Categoria salva com sucesso')
-    }).catch((err)=>{
-        console.log('Erro ao savar categoria'+err)
-    })
 })
 
 router.get('/testes', (req, res)=>{
