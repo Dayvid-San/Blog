@@ -3,6 +3,8 @@ const router = express.Router()
 const mongoose = require('mongoose') // Import do mongoose
 require('../models/Categoria')  // Chamando arquivo do model
 const Categoria = mongoose.model('categorias') // Passando referencia do model para a variavel
+require('../models/postagens')
+const Postagem = mongoose.model('postagens')
 
 
 router.get('/',(req, res)=>{
@@ -106,6 +108,33 @@ router.get('/postagens/add', (req,res)=>{
         req.flash('error_msg', 'Houve um erro ao carregar o formulario')
         res.render('/categorias')
     })
+})
+
+router.post('/postagens/nova',(req,res)=>{
+
+    var erros = []
+
+    if(req.body.categoria === '0'){
+        erros.push({text: 'categoria invalida! Registre um categoria!'})
+    }
+    if(err.length > 0){
+        res.render('admin/addpostagem', {erros: erros})
+    }else{
+        const novaPostagem = {
+            titulo: req.body.titulo,
+            descricao: req.body.descricao,
+            conteudo: req.body.conteudo,
+            categoria: req.body.categoria,
+            slug: req.body.slug
+        }
+        new Postagem(novaPostagem).save().then(()=>{
+            req.flash('success_msg', 'Postagem criada com sucesso')
+            res.redirect('/admin/postagens')
+        }).catch((err)=>{
+            req.flash('error_msg', 'Houve um erro durante o salvamento da postagem')
+            res.redirect('/admin/postagens')
+        })
+    }
 })
 
 module.exports = router

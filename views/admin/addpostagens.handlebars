@@ -1,13 +1,17 @@
+{{#each erros}}
+    <div class="alert alert-danger"></div>
+    {{else}}
+{{/each}}
 <div class="card">
     <div class="card-body">
             <h1>Nova postagem</h1>
-        <form action="">
+        <form action="/adimin/postagens/nova">
             <label for="titulo">Título</label>
-            <input type="text" name="titulo" id="" class="form-control">
+            <input type="text" name="titulo" id="" class="form-control" required>
             <label for="slug">Slug</label>
-            <input type="text" name="slug" class="form-control" id="">
+            <input type="text" name="slug" class="form-control" id="" required>
             <label for="descricao">Descricao: </label>
-            <input type="text" name="descricao" class="form-control" id="">
+            <input type="text" name="descricao" class="form-control" id="" required>
             <label for="conteudo">Conteudo</label>
             <textarea name="conteudo" class="form-control" id="" cols="30" rows="10"></textarea>
             <label for="categoria">Categoria: </label>
