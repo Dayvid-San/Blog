@@ -1,4 +1,3 @@
-
 const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose') // Import do mongoose
@@ -95,8 +94,18 @@ router.post('/categorias/deletar', (req,res)=>{
     })
 })
 
-router.get('/testes', (req, res)=>{
-    res.send('Aqui ficaram os testes')
+router.get('/postagens', (req,res)=>{
+    res.render('adimin/postagens')
+})
+
+router.get('/postagens/add', (req,res)=>{
+    Categoria.find().then((categorias)=>{
+        res.render('admin/addpostagens', {categorias: categorias})
+
+    }).catch((err)=>{
+        req.flash('error_msg', 'Houve um erro ao carregar o formulario')
+        res.render('/categorias')
+    })
 })
 
 module.exports = router
