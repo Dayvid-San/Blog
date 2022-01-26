@@ -1,0 +1,36 @@
+{{#each erros}}
+    <div class="alert alert-danger"></div>
+    {{else}}
+
+{{/each}}
+<!-- 
+    As postagens também estão sendo inseridos no value para serem mostrados
+
+    O textarea não tem o "value" então tu deves pôr o valor dentro da tag
+ -->
+
+<div class="card">
+    <div class="card-body">
+            <h1>Editar postagem</h1>
+        <form action="/adimin/postagens/edit">
+            <input type="hidden" name="id" value="{{postagem._id}}">
+            <label for="titulo">Título</label>
+            <input type="text" name="titulo" id="" class="form-control" value="{{postagem.titulo}}" required>
+            <label for="slug">Slug</label>
+            <input type="text" name="slug" class="form-control" value="{{postagem.slug}}" id="" required>
+            <label for="descricao">Descricao: </label>
+            <input type="text" name="descricao" class="form-control" value="{{postagem.descricao}}" id="" required>
+            <label for="conteudo">Conteudo</label>
+            <textarea name="conteudo" class="form-control" id="" cols="30" rows="10">{{postagem.conteudo}}</textarea>
+            <label for="categoria">Categoria: </label>
+            <select name="categoria" id="" class="custom-select">
+                {{#each categorias}}
+                    <option value="{{_id}}">{{nome}}</option>
+                {{else}}
+                    <option value="">Nenhuma categoria registrada</option>
+                {{/each}}
+            </select>
+            <a href=""><button  class="btn btn-sucess mt-4" type="submit">Editar postagem</button></a>
+        </form>
+    </div>
+</div>
