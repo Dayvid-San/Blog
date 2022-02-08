@@ -8,6 +8,8 @@ const admin = require('./routes/admin')
 const path = require('path');
 const session = require('express-session')
 const flash = require('connect-flash')
+require('./models/Postagens')
+const Postagem = mongoose.model('postagens')
 
 
 // Configurações
@@ -53,6 +55,18 @@ const flash = require('connect-flash')
 // Rotas
 app.use('/user', admin)
 
+app.get('/',(req,res)=>{
+    Postagem.find().populate('categorias').sort({data: 'desc'}).then((postagens)=>{
+        res.render('index', {postagens})
+
+    }).catch((err)=>{
+        req.flash('error_msg', 'Houve um erro em se comunicar com a home')
+        res.redirect('/404')
+    })
+})
+app.get('/404', (req,res)=>{
+    res.send('Erro 404')
+})
 
 
 // Outros
