@@ -1,6 +1,6 @@
 // Carregando modulos
 const express = require('express');
-const handlebars = require('express-handlebars');
+const { engine } = require ('express-handlebars');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express()
@@ -8,11 +8,14 @@ const admin = require('./routes/admin')
 const path = require('path');
 const session = require('express-session')
 const flash = require('connect-flash')
-require('./models/Postagens')
+require('./models/Postagem')
 const Postagem = mongoose.model('postagens')
 require('./models/Categoria')
 const Categoria = mongoose.model('categorias')
 
+
+
+    
 
 // Configurações
     // Sessão
@@ -35,8 +38,11 @@ const Categoria = mongoose.model('categorias')
     app.use(bodyParser.json())
     
     // Handlebars
-    //app.engine('handlebars', handlebars({defaultLayout: 'main'}))
-    //app.set('view engine', 'handlebars');
+    app.engine('handlebars', engine());
+
+    app.set('view engine', 'handlebars');
+
+    app.set("views", "./views");
 
     // Mongoose
     mongoose.Promise = global.Promise

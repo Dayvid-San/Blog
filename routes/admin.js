@@ -3,7 +3,7 @@ const router = express.Router()
 const mongoose = require('mongoose') // Import do mongoose
 require('../models/Categoria')  // Chamando arquivo do model
 const Categoria = mongoose.model('categorias') // Passando referencia do model para a variavel
-require('../models/postagens')
+require('../models/Postagem')
 const Postagem = mongoose.model('postagens')
 
 
@@ -69,21 +69,30 @@ router.get('/categorias/edit/:id', (req,res)=>{
 })
 
 router.post('/categorias/edit',(req,res)=>{
-    Categoria.findOne({_id: req.body.id})
 
-}).then((categoria)=>{
-    categoria.nome = req.body.nome
-    categoria.slug = req.body.slug
+    const {id, name, slug} = req.body;
 
-    categoria.save().then(()=>{
-        req.flash('success_msg', 'Categoria editada com successo')
-        res.redirect('/admin/categorias')
-    }).catch((err)=>{
-        req.flash('error_msg', 'Houve um erro interno ao salvar a edição da categoria')
+    Categoria.findOne({_id: id}).then((categoria)=>{
+        categoria.nome = name
+        categoria.slug = slug
+    
+        return categoria.save()
+        .then(()=>{
+            req.flash('success_msg', 'Categoria editada com successo')
+            res.redirect('/admin/categorias')
+
+        })
+        .catch((err)=>{
+            req.flash('error_msg', 'Houve um erro interno ao salvar a edição da categoria' + err)
+        })
+
     })
-}).catch((err)=>{
-    req.flash('error_msg', "Houve um erro ao editar a cetegoria")
-    res.redirect('/admin/categorias')
+    .catch((err)=>{
+        req.flash('error_msg', "Houve um erro ao editar a cetegoria" + err)
+        res.redirect('/admin/categorias')
+        
+    })
+
 })
 
 router.post('/categorias/deletar', (req,res)=>{
