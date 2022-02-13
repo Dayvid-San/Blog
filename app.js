@@ -46,9 +46,12 @@ const Categoria = mongoose.model('categorias')
 
     // Mongoose
     mongoose.Promise = global.Promise
-    mongoose.connect('mongodb://localhost/blogapp').then(() => {
+    mongoose.connect('mongodb://localhost/blogapp')
+    .then(() => {
         console.log('O banco está conectado')
-    }).catch((err)=>{
+
+    })
+    .catch((err)=>{
         console.log('Não conectado ao mongo. Algo está errado. => '+err)
     })
 
@@ -60,45 +63,62 @@ const Categoria = mongoose.model('categorias')
         next()
     })
 
+
+
 // Rotas
 app.use('/user', admin)
 
 app.get('/',(req,res)=>{
-    Postagem.find().populate('categorias').sort({data: 'desc'}).then((postagens)=>{
+    Postagem
+    .find()
+    .populate('categorias')
+    .sort({data: 'desc'})
+    .then((postagens)=>{
         res.render('index', {postagens})
 
-    }).catch((err)=>{
+    })
+    .catch((err)=>{
         req.flash('error_msg', 'Houve um erro em se comunicar com a home')
         res.redirect('/404')
+    
     })
 })
 
 app.get('/postagem/:slug', (req,res)=>{
     // Vai pesquisar uma postagem pelo slug. O vai slug vai ser passado para o usuário pelo paramentro da rota
-    Postagem.findOne({slug: req.params.slug}).then((postagem)=>{
+    Postagem
+    .findOne({slug: req.params.slug})
+    .then((postagem)=>{
         if(postagem){
             // passando os dados da postagem que ele achou
             res.render('postagem/index', {postagem: postagem})
+
         }else{
             req.flash('error_msg', 'Essa postagem não existe')
             res.redirect('/')
+
         }
-    }).catch((err) =>{
+    })
+    .catch((err) =>{
         req.flash('error_msg', 'Houve um erro interno')
         res.redirect('/')
+
     })
 })
 
 app.get('/categorias',(req,res)=>{
     // Listando as categorias
-    Categoria.find()
+    Categoria
+    .find()
     .then((categorias)=>
     {
         res.render('categorias/index', {categorias: categorias})
+
     })
     .catch((err)=>{
         req.flash('error_msg', 'Houve um erro ao listar as categorias' + err)
         res.redirect('/')
+
     })
 })
 
@@ -110,11 +130,15 @@ app.get('/categorias/slug', (req,res)=>{
         if(categoria)
         {
             // Busca pelos posts que pertencem a categoria, que fora, passadas pelo slug
-            Postagem.find({categira: categoria._id}).then((postagens)=>{
+            Postagem
+            .find({categira: categoria._id})
+            .then((postagens)=>{
                 res.render('categorias/postagens', {postagens: postagens, categoria: categoria})
 
-            }).catch((err)=>{
+            })
+            .catch((err)=>{
                 req.flash('error_msg', 'Houve um erro ao listar os posts!')
+
             })
 
         }
