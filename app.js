@@ -27,11 +27,12 @@ const Categoria = mongoose.model('categorias')
     app.use(flash())
 
     // Middleware
-    app.use((req, res, next)=>{
+    /*app.use((req, res, next)=>{
         res.locale.success_msg = req.flash("success_msg") // São variaveis globais
         res.locals.error_msg = req.flash("error_msg")
         next()
     })
+    */
 
     // Body Parser
     app.use(bodyParser.urlencoded({extended: true}))
@@ -39,10 +40,9 @@ const Categoria = mongoose.model('categorias')
     
     // Handlebars
     app.engine('handlebars', engine());
-
     app.set('view engine', 'handlebars');
-
     app.set("views", "./views");
+
 
     // Mongoose
     mongoose.Promise = global.Promise
@@ -91,17 +91,24 @@ app.get('/postagem/:slug', (req,res)=>{
 
 app.get('/categorias',(req,res)=>{
     // Listando as categorias
-    Categoria.find().then((categorias)=>{
+    Categoria.find()
+    .then((categorias)=>
+    {
         res.render('categorias/index', {categorias: categorias})
-    }).catch((err)=>{
-        req.flash('error_msg', 'Houve um erro ao listar as categorias')
+    })
+    .catch((err)=>{
+        req.flash('error_msg', 'Houve um erro ao listar as categorias' + err)
         res.redirect('/')
     })
 })
 
 app.get('/categorias/slug', (req,res)=>{
-    Categoria.findOne({slug: req.params.slug}).then((categoria)=>{
-        if(categoria){
+    
+    Categoria.findOne({slug: req.params.slug})
+    .then((categoria)=>
+    {
+        if(categoria)
+        {
             // Busca pelos posts que pertencem a categoria, que fora, passadas pelo slug
             Postagem.find({categira: categoria._id}).then((postagens)=>{
                 res.render('categorias/postagens', {postagens: postagens, categoria: categoria})
@@ -110,14 +117,18 @@ app.get('/categorias/slug', (req,res)=>{
                 req.flash('error_msg', 'Houve um erro ao listar os posts!')
             })
 
-        }else{
+        }
+        else
+        {
             req.flash('error_msg', 'Está categoria não existe')
             res.redirect('/')
         }
 
-    }).catch((err)=>{
+    })
+    .catch((err)=>{
         req.flash('error_msg', 'Houve um erro interno ao carregar a página dessa categoria')
         res.redirect('/')
+        
     })
 })
 
