@@ -143,20 +143,27 @@ router.get('/postagens', (req,res)=>{
     .sort({data: 'desc'})
     .then((postagens)=>{
         res.render('adimin/postagens', {postagens: postagens})
-    }).catch((err)=>{
+
+    })
+    .catch((err)=>{
         req.flash('error_msg', 'Houve um erro ao listar as postagens')
         res.redirect('/admin')
+
     })
 })
 
 
 router.get('/postagens/add', (req,res)=>{
-    Categoria.find().then((categorias)=>{
+    Categoria
+    .find()
+    .then((categorias)=>{
         res.render('admin/addpostagens', {categorias: categorias})
 
-    }).catch((err)=>{
+    })
+    .catch((err)=>{
         req.flash('error_msg', 'Houve um erro ao carregar o formulario')
         res.render('/categorias')
+
     })
 })
 
@@ -230,10 +237,12 @@ router.post('/postagem/edit', (req,res)=>{
         postagem.conteudo = req.body.conteudo
         postagem.categoria = req.body.categoria
 
-        postagem.save().then(()=>{
+        postagem.save()
+        .then(()=>{
             req.flash('sucess_msg', "Postagem editada com sucesso")
             res.redirect('/admin/postagens')
-        }).catch((err)=>{
+        })
+        .catch((err)=>{
             req.flash('error_msg', "Houve um erro interno")
             res.redirect('/adimin/postagens')
 
