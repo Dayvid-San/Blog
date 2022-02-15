@@ -142,7 +142,7 @@ router.get('/postagens', (req,res)=>{
     .populate("categoria")
     .sort({data: 'desc'})
     .then((postagens)=>{
-        res.render('adimin/postagens', {postagens: postagens})
+        res.render('admin/postagens', {postagens: postagens})
 
     })
     .catch((err)=>{
@@ -177,7 +177,7 @@ router.post('/postagens/nova',(req,res)=>{
     if(req.body.categoria === '0'){
         erros.push({text: 'categoria invalida! Registre um categoria!'})
     }
-    if(err.length > 0)
+    if(erros.length > 0)
     {
         res.render('admin/addpostagem', {erros: erros})
     }
@@ -244,7 +244,7 @@ router.post('/postagem/edit', (req,res)=>{
         })
         .catch((err)=>{
             req.flash('error_msg', "Houve um erro interno")
-            res.redirect('/adimin/postagens')
+            res.redirect('/admin/postagens')
 
         })
 

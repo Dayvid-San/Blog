@@ -54,15 +54,11 @@ const usuarios = require('./routes/usuario')
     })
     .catch((err)=>{
         console.log('Não conectado ao mongo. Algo está errado. => '+err)
+        
     })
 
     // Public
     app.use(express.static(path.join(__dirname, 'public')))
-
-    app.use((req, res, next)=>{
-        console.log('Nova requisição')
-        next()
-    })
 
 
 
