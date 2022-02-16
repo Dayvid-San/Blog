@@ -36,28 +36,40 @@ router.get('/categorias', (req, res)=>{
 
 router.get('/categorias/add', (req, res)=>{
     res.render('admin/addcategorias')
+
 })
 
-
+// *Tem algum problema no handlebars que impedindo de o banco receber os dados*
 router.post('/categorias/add', (req,res)=>{
 
     var erros = []
     // validando formularios
+
     if(req.body.nome || typeof req.body.nome == undefined || req.body.nome == null){
         error.push({texto: "nome invalido"})
+
     }
+
     if(!req.body.slug || typeof req.body.nome == undefined || req.body.nome == null){
         error.push({texto: "slug invalido"})
+
     }
+
     if(req.body.nome.length < 2){
         erros.push({texto: 'Nome da categoria é muito pequeno'})
+
     }
+
     if(erros.length > 0){
         res.render('admin/add:categorias', {erros: erros})
-    }else{
+
+    }
+
+    else{
         const novaCategoria = { // Recebe os dados do formulario
             nome: req.body.nome,
             slug: req.body.slug
+            
         }
     
         new Categoria(novaCategoria)
@@ -74,6 +86,24 @@ router.post('/categorias/add', (req,res)=>{
         })
     }
 
+})
+
+router.post('/categorias/nova', (req,res)=>{
+    //const { nome, slug } = req.body
+    const novaCategoria = {
+        nome: req.body.nome,
+        slug: req.body.slug
+        //nome: nome,
+        //slug: slug
+    }
+
+    new Categoria(novaCategoria).save()
+    .then(()=>{
+        console.log('Categoria salva com sucesso')
+    })
+    .catch((err)=>{
+        console.log('Erro ao salvar categoria')
+    })
 })
 
 
