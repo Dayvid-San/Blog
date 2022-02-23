@@ -12,7 +12,9 @@ require('./models/Postagem')
 const Postagem = mongoose.model('postagens')
 require('./models/Categoria')
 const Categoria = mongoose.model('categorias')
-const usuarios = require('./routes/usuario')
+const usuarios = require('./routes/usuario');
+const passport = require('passport');
+require('./config/auth')(passport);
 
 
 
@@ -20,12 +22,16 @@ const usuarios = require('./routes/usuario')
 
 // Configurações
     // Sessão
+    // A ordem aqui importa
     app.use(session({
         secret: "CursoNode",  // Chave para gerar sessão (ponha uma segura)
         resave: true,
         saveUninitialized: true
     }))
+    app.use(passport.initialize())
+    app.use(passport.session())
     app.use(flash())
+
 
      //Middleware
     app.use((req, res, next)=>{
