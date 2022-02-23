@@ -28,8 +28,10 @@ require('./config/auth')(passport);
         resave: true,
         saveUninitialized: true
     }))
+
     app.use(passport.initialize())
     app.use(passport.session())
+
     app.use(flash())
 
 
@@ -37,6 +39,7 @@ require('./config/auth')(passport);
     app.use((req, res, next)=>{
         res.locals.success_msg = req.flash("success_msg") // São variaveis globais
         res.locals.error_msg = req.flash("error_msg")
+        res.locals.error = req.flash('error')
         next()
     })
     

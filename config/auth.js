@@ -15,7 +15,7 @@ module.exports = function(passport){
     // Sistema de autenticação
 
     // Com essa parte indicamos o campo que queremos analizar
-    passport.use(new localStrategy({usernamefield: 'email'}, (email, senha, done) => {
+    passport.use(new localStrategy({usernamefield: 'email', passwordField: 'senha'}, (email, senha, done) => {
 
         Usuario.findOne({email: email})
         .then((usuario) => {
@@ -36,7 +36,7 @@ module.exports = function(passport){
 
                 if (batem)
                 {
-                    return done(null, user)
+                    return done(null, usuario)
                 }
                 else
                 {
@@ -61,9 +61,9 @@ module.exports = function(passport){
     passaport.deserializeUser((id, done) => {
 
         // A função de callback está procurando um usuário pelo ID
-        User.findById(id, (err, usuario) => {
+        Usuario.findById(id, (err, usuario) => {
 
-            done(err, user)
+            done(err, usuario)
 
         })
     })
