@@ -66,9 +66,12 @@ router.post('/categorias/add', (req,res)=>{
     }
 
     else{
+
+        const { nome, slug } = req.body;
         const novaCategoria = { // Recebe os dados do formulario
-            nome: req.body.nome,
-            slug: req.body.slug
+
+            nome: nome,
+            slug: slug
             
         }
     
@@ -89,12 +92,10 @@ router.post('/categorias/add', (req,res)=>{
 })
 
 router.post('/categorias/nova', (req,res)=>{
-    //const { nome, slug } = req.body
+    const { nome, slug } = req.body;
     const novaCategoria = {
-        nome: req.body.nome,
-        slug: req.body.slug
-        //nome: nome,
-        //slug: slug
+        nome: nome,
+        slug: slug
     }
 
     new Categoria(novaCategoria).save()
@@ -204,22 +205,28 @@ router.post('/postagens/nova',(req,res)=>{
 
     var erros = []
 
-    if(req.body.categoria === '0'){
+    if(req.body.categoria === '0')
+    {
         erros.push({text: 'categoria invalida! Registre um categoria!'})
+
     }
     if(erros.length > 0)
     {
         res.render('admin/addpostagem', {erros: erros})
+
     }
     else
     {
+
+        const { titulo, descricao, conteudo, categoria, slug} = req.body;
+
         const novaPostagem = {
 
-            titulo: req.body.titulo,
-            descricao: req.body.descricao,
-            conteudo: req.body.conteudo,
-            categoria: req.body.categoria,
-            slug: req.body.slug
+            titulo: titulo,
+            descricao: descricao,
+            conteudo: conteudo,
+            categoria: categoria,
+            slug: slug
 
         }
         new Postagem(novaPostagem).save()
@@ -239,7 +246,8 @@ router.post('/postagens/nova',(req,res)=>{
 // Editando categorias
 router.get('/postagens/edit/:id', (req,res)=>{
 
-    Postagem.findOneAndRemove({_id: req.body.params.id}).then((postagem)=>{
+    Postagem.findOneAndRemove({_id: req.body.params.id})
+    .then((postagem)=>{
         
         //Listando as categorias no editCategorias
         Categoria.find().
@@ -250,22 +258,27 @@ router.get('/postagens/edit/:id', (req,res)=>{
         .catch((err)=>{
             req.flash('error_msg', 'Houve um erro ao listar as categorias')
             res.redirect('/admin/postagens')
+
         })
     }).catch((err)=>{
         req.flash('error_msg', 'Houve um erro ao carregaro formulário de edição')
         res.redirect('/admin/postagens')
+
     })
 })
 
 router.post('/postagem/edit', (req,res)=>{
+
+    const { titulo, slug, descricao, conteudo, categoria } = req.body;
+    
     // findOne pesquisa pela postagem
     Postagem.findOne({_id: req.body.id}).then((postagem)=>{
 
-        postagem.titulo = req.body.titulo
-        postagem.slug = req.body.slug
-        postagem.descricao = req.body.descricao
-        postagem.conteudo = req.body.conteudo
-        postagem.categoria = req.body.categoria
+        postagem.titulo = titulo
+        postagem.slug = slug
+        postagem.descricao = descricao
+        postagem.conteudo = conteudo
+        postagem.categoria = categoria
 
         postagem.save()
         .then(()=>{
