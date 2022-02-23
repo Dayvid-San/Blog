@@ -157,7 +157,7 @@ router.post('/categorias/deletar', (req,res)=>{
         res.redirect('/admin/categorias')
 
     })
-    .catch((err)=>{
+    .catch((err) => {
         req.flash('error_msg', 'Houve um erro ao deletar a categoria')
         res.redirect('/admin/categorias')
 
