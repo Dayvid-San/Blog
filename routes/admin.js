@@ -5,20 +5,21 @@ require('../models/Categoria')  // Chamando arquivo do model
 const Categoria = mongoose.model('categorias') // Passando referencia do model para a variavel
 require('../models/Postagem')
 const Postagem = mongoose.model('postagens')
+const { eAdmin } = require('../helpers/eAdmin')
 
 
 
-router.get('/',(req, res)=>{
+router.get('/', eAdmin,(req, res)=>{
     res.render('admin/index')
 })
 
 
-router.get('/posts', (req, res) => {
+router.get('/posts', eAdmin, (req, res) => {
     res.send('Página de postes')
 })
 
 
-router.get('/categorias', (req, res)=>{
+router.get('/categorias', eAdmin, (req, res)=>{
     Categoria
     .find()
     .sort({date: 'desc'})
@@ -34,13 +35,13 @@ router.get('/categorias', (req, res)=>{
 })
 
 
-router.get('/categorias/add', (req, res)=>{
+router.get('/categorias/add', eAdmin, (req, res)=>{
     res.render('admin/addcategorias')
 
 })
 
 // *Tem algum problema no handlebars que impedindo de o banco receber os dados*
-router.post('/categorias/add', (req,res)=>{
+router.post('/categorias/add', eAdmin, (req,res)=>{
 
     var erros = []
     // validando formularios
@@ -91,7 +92,7 @@ router.post('/categorias/add', (req,res)=>{
 
 })
 
-router.post('/categorias/nova', (req,res)=>{
+router.post('/categorias/nova', eAdmin, (req,res)=>{
     const { nome, slug } = req.body;
     const novaCategoria = {
         nome: nome,
@@ -108,7 +109,7 @@ router.post('/categorias/nova', (req,res)=>{
 })
 
 
-router.get('/categorias/edit/:id', (req,res)=>{
+router.get('/categorias/edit/:id', eAdmin, (req,res)=>{
     Categoria.findOne({_id:req.params.id})
     .then((categorias) =>{
         res.render('admin/editcategorias', {categoria: categoria})
@@ -122,7 +123,7 @@ router.get('/categorias/edit/:id', (req,res)=>{
 })
 
 
-router.post('/categorias/edit',(req,res)=>{
+router.post('/categorias/edit', eAdmin,(req,res)=>{
 
     const {id, name, slug} = req.body;
 
@@ -150,7 +151,7 @@ router.post('/categorias/edit',(req,res)=>{
 })
 
 
-router.post('/categorias/deletar', (req,res)=>{
+router.post('/categorias/deletar', eAdmin, (req,res)=>{
     Categoria
     .remove({_id: req.body.id})
     .then(()=>{
@@ -166,7 +167,7 @@ router.post('/categorias/deletar', (req,res)=>{
 })
 
 
-router.get('/postagens', (req,res)=>{
+router.get('/postagens', eAdmin, (req,res)=>{
 
     Postagem
     .find()
@@ -184,7 +185,7 @@ router.get('/postagens', (req,res)=>{
 })
 
 
-router.get('/postagens/add', (req,res)=>{
+router.get('/postagens/add', eAdmin, (req,res)=>{
     Categoria
     .find()
     .then((categorias)=>{
@@ -244,7 +245,7 @@ router.post('/postagens/nova',(req,res)=>{
 })
 
 // Editando categorias
-router.get('/postagens/edit/:id', (req,res)=>{
+router.get('/postagens/edit/:id', eAdmin, (req,res)=>{
 
     Postagem.findOneAndRemove({_id: req.body.params.id})
     .then((postagem)=>{
@@ -267,7 +268,7 @@ router.get('/postagens/edit/:id', (req,res)=>{
     })
 })
 
-router.post('/postagem/edit', (req,res)=>{
+router.post('/postagem/edit', eAdmin, (req,res)=>{
 
     const { titulo, slug, descricao, conteudo, categoria } = req.body;
     
@@ -301,7 +302,7 @@ router.post('/postagem/edit', (req,res)=>{
 })
 
 
-router.get('/postagens/deletar/:id',(req,res)=>{
+router.get('/postagens/deletar/:id', eAdmin,(req,res)=>{
     Postagem.remove({_id: req.params.id})
     .then(()=>{
         req.flash('sucess_msg', 'postagem deletada com sucesso!')
