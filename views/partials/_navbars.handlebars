@@ -21,6 +21,9 @@
             <li><a class="dropdown-item" href="/usuarios/categorias">Categoria</a></li>
             {{#if user}}
 
+            <li><hr class="dropdown-divider">Sair</li>
+            <a href="/usuarios/logout" class="nav-link disabled">Sair</a>
+
             {{else}}
             <li><hr class="dropdown-divider">Login</li>
             <li><a class="dropdown-item" href="/usuarios/registro">Registro</a></li>

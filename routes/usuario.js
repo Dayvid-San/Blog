@@ -142,5 +142,14 @@ router.post('/login', (req, res, next) => {
 
 })
 
+router.get('/logout', (req,res) => {
+
+    // O Passport Faz o logout automaticamente, sem que precisemos criar uma função para isso
+    req.logout()
+    req.flash('sucesse_msg', 'Deslogado com sucesso!')
+    res.redirect('')
+
+})
+
 
 module.exports = router
